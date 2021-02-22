@@ -13,10 +13,11 @@ const port = 2525;
 //    "certbot renew"
 
 const server = new SMTPServer({
-  secure: true,
+  secure: false,
   key: fs.readFileSync("/etc/letsencrypt/live/smtp.snapcatch.org/privkey.pem"),
   cert: fs.readFileSync("/etc/letsencrypt/live/smtp.snapcatch.org/cert.pem"),
   onAuth(auth, session, callback) {
+      console.log(auth);
     if (
       auth.username !== "postmaster@snapcatch.org" ||
       auth.password !== "123"
