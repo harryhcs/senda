@@ -9,6 +9,7 @@
   "author": "Herman Stander <her.stander@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "axios": "^0.21.1",
     "mailparser": "^3.1.0",
     "smtp-server": "^3.8.0"
   },
