@@ -30,14 +30,14 @@ const server = new SMTPServer({
         console.log("Error:", err);
       }
       axios.get("http://40.123.253.37:1880/?Ok=true");
-      axios
-        .post(process.env.TRIGGER_URL, parsed)
-        .then(function (response) {
-          console.log("OK");
-        })
-        .catch(function (error) {
-          console.log("Error");
-        });
+    //   axios
+    //     .post(process.env.TRIGGER_URL, parsed)
+    //     .then(function (response) {
+    //       console.log("OK");
+    //     })
+    //     .catch(function (error) {
+    //       console.log("Error");
+    //     });
     });
     stream.on("end", callback);
   },
