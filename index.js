@@ -1,5 +1,7 @@
 const SMTPServer = require("smtp-server").SMTPServer;
 const parser = require("mailparser").simpleParser;
+const hostname = "127.0.0.1";
+const port = 80;
 
 const server = new SMTPServer({
   onAuth(auth, session, callback) {
@@ -38,4 +40,6 @@ server.on("error", (err) => {
   console.log("Error %s", err.message);
 });
 
-server.listen(80);
+server.listen(port, () => {
+  console.log(`Server running at on port: ${port}`);
+});
