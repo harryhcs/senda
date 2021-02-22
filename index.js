@@ -17,7 +17,6 @@ const server = new SMTPServer({
     callback(null, { user: 1 });
   },
   onMailFrom(address, session, callback) {
-    console.log(session);
     if (address.address !== process.env.USERNAME) {
       return callback(new Error("You are not allowed to send mail"));
     }
@@ -31,12 +30,12 @@ const server = new SMTPServer({
         console.log("Error:", err);
       }
       axios
-        .post("https://7a25e699420a.ngrok.io/api/ProcessEmail/", parsed)
+        .post(process.env.TRIGGER_URL, parsed)
         .then(function (response) {
-          console.log(response);
+          console.log("OK");
         })
         .catch(function (error) {
-          console.log(error);
+          console.log("Error:", error);
         });
     });
     stream.on("end", callback);
