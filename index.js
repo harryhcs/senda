@@ -18,6 +18,7 @@ const server = new SMTPServer({
 //   cert: fs.readFileSync("/etc/letsencrypt/live/smtp.snapcatch.org/cert.pem"),
   onAuth(auth, session, callback) {
       console.log(auth);
+      console.log(session);
     if (
       auth.username !== "postmaster@snapcatch.org" ||
       auth.password !== "123"
@@ -27,12 +28,14 @@ const server = new SMTPServer({
     callback(null, { user: 1 });
   },
   onMailFrom(address, session, callback) {
+      console.log(session);
     if (address.address !== "postmaster@snapcatch.org") {
       return callback(new Error("You are not allowed to send mail"));
     }
     return callback(null, { ok: true }); // Accept the address
   },
   onData(stream, session, callback) {
+
     // stream.pipe(process.stdout); // print message to console
     // stream.on("end", callback);
     parser(stream, {}, (err, parsed) => {
@@ -46,6 +49,7 @@ const server = new SMTPServer({
     // return callback(null, { ok: true });
   },
   onConnect(session, callback) {
+      console.log(session);
     callback(null, { ok: true });
   },
 });
