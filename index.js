@@ -18,7 +18,7 @@ const server = new SMTPServer({
   onAuth(auth, session, callback) {
     if (
       auth.username !== "postmaster@snapcatch.org" ||
-      auth.password !== "Kznwildlaw@1"
+      auth.password !== "123"
     ) {
       return callback(new Error("Invalid username or password"));
     }
