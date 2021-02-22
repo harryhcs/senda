@@ -1,16 +1,16 @@
+require("dotenv").config();
 const SMTPServer = require("smtp-server").SMTPServer;
 const parser = require("mailparser").simpleParser;
 const axios = require("axios");
 
 const port = 2525;
-
 const server = new SMTPServer({
   secure: false,
   disabledCommands: ['STARTTLS'],
   onAuth(auth, session, callback) {
     if (
-      auth.username !== "postmaster@snapcatch.org" ||
-      auth.password !== "123"
+      auth.username !== process.env.USERNAME ||
+      auth.password !== process.env.PASSWORD
     ) {
       return callback(new Error("Invalid username or password"));
     }
@@ -18,7 +18,7 @@ const server = new SMTPServer({
   },
   onMailFrom(address, session, callback) {
     console.log(session);
-    if (address.address !== "postmaster@snapcatch.org") {
+    if (address.address !== process.env.USERNAME) {
       return callback(new Error("You are not allowed to send mail"));
     }
     return callback(null, { ok: true }); // Accept the address
