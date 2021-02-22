@@ -1,7 +1,7 @@
 const SMTPServer = require("smtp-server").SMTPServer;
 const parser = require("mailparser").simpleParser;
 const hostname = "127.0.0.1";
-const port = 443;
+const port = 2525;
 
 const server = new SMTPServer({
   onAuth(auth, session, callback) {
