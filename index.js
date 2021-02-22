@@ -1,6 +1,7 @@
-const fs = require("fs");
 const SMTPServer = require("smtp-server").SMTPServer;
 const parser = require("mailparser").simpleParser;
+const axios = require("axios");
+
 const port = 2525;
 
 const server = new SMTPServer({
@@ -29,11 +30,16 @@ const server = new SMTPServer({
       if (err) {
         console.log("Error:", err);
       }
-      //   Do something with parsed. Send somewhere?
-      console.log(parsed);
+      axios
+        .post("https://7a25e699420a.ngrok.io/api/ProcessEmail/", parsed)
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
     });
     stream.on("end", callback);
-    // return callback(null, { ok: true });
   },
   onConnect(session, callback) {
     callback(null, { ok: true });
