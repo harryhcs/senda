@@ -7,11 +7,13 @@ const Tracing = require("@sentry/tracing");
 
 Sentry.init({
   dsn:
-    "https://edd9e0cf639e40fcb941fadb13fba408@o529842.ingest.sentry.io/5648761",
-
-  // We recommend adjusting this value in production, or using tracesSampler
-  // for finer control
+    "https://81d83335e38c4467ac0c955573be5d1d@o529842.ingest.sentry.io/5648774",
   tracesSampleRate: 1.0,
+});
+
+const transaction = Sentry.startTransaction({
+  op: "INIT",
+  name: "Init Connection",
 });
 
 const port = 2525;
@@ -26,6 +28,7 @@ const server = new SMTPServer({
       Sentry.captureException("Invalid username or password:", {auth, session});
       return callback(new Error("Invalid username or password"));
     }
+    transaction.finish();
     callback(null, { user: 1 });
   },
   onMailFrom(address, session, callback) {
