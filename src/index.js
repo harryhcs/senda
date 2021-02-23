@@ -21,19 +21,21 @@ const server = new SMTPServer({
   secure: false,
   disabledCommands: ['STARTTLS'],
   onAuth(auth, session, callback) {
+    Sentry.captureMessage("Authenticating", "info");
     if (
       auth.username !== process.env.USERNAME ||
       auth.password !== process.env.PASSWORD
     ) {
-      Sentry.captureException("Invalid username or password:", {auth, session});
+      Sentry.captureException(new Error("Invalid username or password"), {auth, session});
       return callback(new Error("Invalid username or password"));
     }
     transaction.finish();
     callback(null, { user: 1 });
   },
   onMailFrom(address, session, callback) {
+    Sentry.captureMessage("Receiving Mail", "info");
     if (address.address !== process.env.USERNAME) {
-      Sentry.captureException("Username not allowed:", {
+      Sentry.captureException(new Error("Username not allowed"), {
         addres,
         session,
       });
@@ -42,13 +44,11 @@ const server = new SMTPServer({
     return callback(null, { ok: true }); // Accept the address
   },
   onData(stream, session, callback) {
-    // stream.pipe(process.stdout); // print message to console
-    // stream.on("end", callback);
     parser(stream, {}, (err, parsed) => {
       if (err) {
-        Sentry.captureException("Mail Parse error:", {
-          err,
-          session
+        Sentry.captureException(new Error("Mail parsing error"), {
+          error,
+          session,
         });
       }
       // console.log(parsed); --> log
@@ -58,11 +58,10 @@ const server = new SMTPServer({
       axios
         .post(process.env.TRIGGER_URL, parsed)
         .then(function (response) {
-          console.log("OK");
+          Sentry.captureMessage("Mail delivered to Function App", "info");
         })
         .catch(function (error) {
-          console.log("Error");
-          Sentry.captureException("HTTP Post error:", {
+          Sentry.captureException(new Error("HTTP Post error"), {
             error,
             session,
           });
@@ -71,12 +70,12 @@ const server = new SMTPServer({
     stream.on("end", callback);
   },
   onConnect(session, callback) {
+    Sentry.captureMessage("Connection estalished", "info");
     callback(null, { ok: true });
   },
 });
 server.on("error", (err) => {
-  Sentry.captureException("Error:", {message: err.message});
-  console.log("Error %s", err.message);
+  Sentry.captureException(new Error("App Error"), { message: err.message });
 });
 
 server.listen(port, () => {
