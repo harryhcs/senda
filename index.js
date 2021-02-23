@@ -29,7 +29,8 @@ const server = new SMTPServer({
       if (err) {
         console.log("Error:", err);
       }
-      axios.get("http://40.123.253.37:1880/debug/?Ok=true");
+      console.log(parsed);
+    //   axios.get("http://40.123.253.37:1880/debug/?Ok=true");
       axios
         .post(process.env.TRIGGER_URL, parsed)
         .then(function (response) {
