@@ -2,13 +2,15 @@
   "name": "senda",
   "version": "1.0.0",
   "description": "A simple SMTP service",
-  "main": "index.js",
+  "main": "./src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Herman Stander <her.stander@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@sentry/node": "^6.2.0",
+    "@sentry/tracing": "^6.2.0",
     "axios": "^0.21.1",
     "dotenv": "^8.2.0",
     "mailparser": "^3.1.0",
